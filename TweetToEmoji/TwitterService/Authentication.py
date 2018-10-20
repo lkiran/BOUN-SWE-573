@@ -3,17 +3,41 @@ import json
 import oauth2
 
 class Authentication(object):
+	__instance = None
+
+	@staticmethod
+	def getInstance():
+		""" Static access method. """
+		if Authentication.__instance == None:
+			Authentication()
+		return Authentication.__instance
+
 	def __init__(self):
+		""" Virtually private constructor. """
+		if Authentication.__instance is not None:
+			raise Exception("This class is a singleton! Try 'Authentication.getInstance()'")
+		else:
+			self.__load()
+			Authentication.__instance = self
+
+	def __load(self):
 		json_data = open('config.json').read()
 		data = json.loads(json_data)
-		self.CONSUMER_SECRET = data.get('CONSUMER_SECRET', "")
-		self.CONSUMER_KEY = data.get('CONSUMER_KEY', "")
+		self.API_SECRET_KEY = data.get('API_SECRET_KEY', "")
+		if not self.API_SECRET_KEY:
+			raise Exception("'API_SECRET_KEY' key is not found in 'config.json' or empty!")
+		self.API_KEY = data.get('API_KEY', "")
+		if not self.API_KEY:
+			raise Exception("'API_KEY' key is not found in 'config.json' or empty!")
+		self.ACCESS_TOKEN = data.get('ACCESS_TOKEN', "")
+		if not self.ACCESS_TOKEN:
+			raise Exception("'ACCESS_TOKEN' key is not found in 'config.json' or empty!")
+		self.ACCESS_TOKEN_SECRET = data.get('ACCESS_TOKEN_SECRET', "")
+		if not self.ACCESS_TOKEN_SECRET:
+			raise Exception("'ACCESS_TOKEN_SECRET' key is not found in 'config.json' or empty!")
 
-	def oauth_req(self, url, key, secret, http_method = "GET", post_body = "", http_headers = None):
-		consumer = oauth2.Consumer(key = self.CONSUMER_KEY, secret = self.CONSUMER_SECRET)
-		token = oauth2.Token(key = key, secret = secret)
+	def GetClient(self):
+		consumer = oauth2.Consumer(key = self.API_KEY, secret = self.API_SECRET_KEY)
+		token = oauth2.Token(key = self.ACCESS_TOKEN, secret = self.ACCESS_TOKEN_SECRET)
 		client = oauth2.Client(consumer, token)
-		resp, content = client.request(url, method = http_method, body = post_body, headers = http_headers)
-		return content
-
-	# home_timeline = oauth_req('https://api.twitter.com/1.1/statuses/home_timeline.json', 'abcdefg', 'hijklmnop')
+		return client

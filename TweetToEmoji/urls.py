@@ -16,10 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from TwitterService.Authentication import Authentication
-
 urlpatterns = [
     path('admin/', admin.site.urls),
 ]
 
-auth = Authentication()
+# client = TwitterClient()
+# content = client.Get('statuses/home_timeline.json')
+#
+# print(content)
