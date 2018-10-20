@@ -11,4 +11,7 @@ Some possible inputs and outputs which is aim to obtain:
 + Going home under rain is terrible -> 🏡🏃🌧️😢 
 + Thank you all for your support. -> 🙏👉💪
 
+Python v3.7
+Django v2.1 
+
 The more will come in the next weeks!
