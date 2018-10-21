@@ -2,3 +2,5 @@
 TweetToEmoji/config.json
 TweetToEmoji/config.json
 TweetToEmoji/config.json
+*.pyc
+*.pyc
