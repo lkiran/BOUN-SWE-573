@@ -1,5 +1,4 @@
 from django.db import models
-from django import forms
 
 class Emoji(models.Model):
 	Id = models.AutoField(primary_key = True)
