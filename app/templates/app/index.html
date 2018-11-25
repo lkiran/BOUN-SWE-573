@@ -1,45 +1,123 @@
 {% extends 'app/_layout.html' %}
 
 {% block body %}
+    <div class="row">
+        <div class="col-lg-8 mx-2 my-3 p-3 bg-white rounded shadow-sm" id="tweet-container"></div>
+        <div class="col-lg-3 mx-2 my-3 mb-auto py-3 bg-white rounded shadow-sm" id="" style="">
+            <h5>SUGGEST SOME EMOJI!</h5>
+            <p>
+                For improving the emoji forms of tweets, please contribute some word/phrase and emoji pairs. You can
+                choose from among emoji list below to type.
+            </p>
+            <form id="frm-suggestion">
+                <div class="form-group">
+                    <input type="text" class="form-control" name="txt-phrase" id="txt-phrase"
+                           placeholder="WORD OR PHRASE">
+                </div>
 
-    <div class="my-3 p-3 bg-white rounded shadow-sm">
-        <h6 class="border-bottom border-gray pb-2 mb-0">Recent updates</h6>
-        <div class="media text-muted pt-3">
-            <img data-src="holder.js/32x32?theme=thumb&amp;bg=007bff&amp;fg=007bff&amp;size=1" alt="32x32"
-                 class="mr-2 rounded" style="width: 32px; height: 32px;"
-                 src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2232%22%20height%3D%2232%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_16696a49a4d%20text%20%7B%20fill%3A%23007bff%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A2pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_16696a49a4d%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20fill%3D%22%23007bff%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2211.546875%22%20y%3D%2216.9%22%3E32x32%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"
-                 data-holder-rendered="true">
-            <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-                <strong class="d-block text-gray-dark">@username</strong>
-                Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris
-                condimentum nibh, ut fermentum massa justo sit amet risus.
-            </p>
+                <div class="form-group">
+                    <input type="text" class="form-control" name="txt-emojis" id="txt-emojis"
+                           aria-describedby="help-emoji"
+                           placeholder="EMOJI">
+                    <small id="help-emoji" class="form-text text-muted">Choose one or more emoji</small>
+                </div>
+
+                <button class="btn btn-block btn-default" type="submit">SUGGEST</button>
+                <small id="message-suggest"></small>
+            </form>
+            <div id="emoji-container" class="text-justify mt-3" style="overflow-y: scroll; height: 56vh;"></div>
         </div>
-        <div class="media text-muted pt-3">
-            <img data-src="holder.js/32x32?theme=thumb&amp;bg=e83e8c&amp;fg=e83e8c&amp;size=1" alt="32x32"
-                 class="mr-2 rounded"
-                 src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2232%22%20height%3D%2232%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_16696a49a4f%20text%20%7B%20fill%3A%23e83e8c%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A2pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_16696a49a4f%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20fill%3D%22%23e83e8c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2211.546875%22%20y%3D%2216.9%22%3E32x32%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"
-                 data-holder-rendered="true" style="width: 32px; height: 32px;">
-            <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-                <strong class="d-block text-gray-dark">@username</strong>
-                Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris
-                condimentum nibh, ut fermentum massa justo sit amet risus.
-            </p>
-        </div>
-        <div class="media text-muted pt-3">
-            <img data-src="holder.js/32x32?theme=thumb&amp;bg=6f42c1&amp;fg=6f42c1&amp;size=1" alt="32x32"
-                 class="mr-2 rounded"
-                 src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2232%22%20height%3D%2232%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_16696a49a50%20text%20%7B%20fill%3A%236f42c1%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A2pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_16696a49a50%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20fill%3D%22%236f42c1%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2211.546875%22%20y%3D%2216.9%22%3E32x32%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"
-                 data-holder-rendered="true" style="width: 32px; height: 32px;">
-            <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-                <strong class="d-block text-gray-dark">@username</strong>
-                Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris
-                condimentum nibh, ut fermentum massa justo sit amet risus.
-            </p>
-        </div>
-        <small class="d-block text-right mt-3">
-            <a href="#">All updates</a>
-        </small>
     </div>
 
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/template" id="template-tweet">
+        << _.each(content, function(item, index) { >>
+        <div class="media text-muted pt-3">
+            <img src="<<= item.user.profile_image_url_https >>" class="mr-2 rounded" style="width: 48px; height: 48px;"
+                 data-holder-rendered="true">
+            <p class="media-body pr-2 pb-3 mb-0 lh-125 border-bottom border-gray">
+                <span class="d-block small text-gray-dark"><strong
+                        class="text-gray-dark"><<= item.user.screen_name >></strong> @<<= item.user.name >></span>
+                <<= item.full_text >>
+            </p>
+            <div class="vote my-auto" style="float: right">
+                <a href="" title="Like"><i class="fas fa-chevron-up"></i></a>
+                <br><br>
+                <a href="" title="Wrong"><i class="fas fa-chevron-down"></i></a>
+            </div>
+        </div>
+        << }); >>
+    </script>
+
+    <script type="text/template" id="template-emoji">
+        << _.each(content, function(item, index) { >>
+        <a href="#<<= item.fields.Icon >>" data-emojiId="<<=item.pk >>" title="<<= item.fields.Name >>"
+           class="emoji-key zoom"><<=item.fields.Icon >></a>
+        << }); >>
+    </script>
+
+    <script>
+        var emojilist = [];
+
+        function LoadTweets(q) {
+            $.getJSON("/tweets/" + q, function (data) {
+                var template = _.template($("#template-tweet").html());
+                $("#tweet-container").html(template({content: data.statuses}));
+                console.log(data);
+            });
+        }
+
+        $(document).ready(function () {
+            console.log("index");
+            var intoductionquery = 'nasa';
+            $('#txt-query').val(intoductionquery);
+            LoadTweets(intoductionquery);
+
+            $('#btn-query').click(function () {
+                var q = $('#txt-query').val();
+                LoadTweets(q);
+            });
+
+
+            $('#txt-query').on("keypress", function (e) {
+                if (e.keyCode !== 13) return true;
+                var q = $('#txt-query').val();
+                LoadTweets(q);
+                return false;
+            });
+
+            $.getJSON("/emojis/", function (data) {
+                emojilist = data;
+                var template = _.template($("#template-emoji").html());
+                $("#emoji-container").html(template({content: data}));
+                $('.emoji-key').click(function () {
+                    var emoji = $(this).html();
+                    $('#txt-emojis').val($('#txt-emojis').val() + emoji);
+                });
+                console.log(data);
+            });
+
+            $('#frm-suggestion').submit(function (e) {
+                e.preventDefault();
+                json = $(this).serialize();
+                $('#frm-suggestion > button[type=submit]').attr('disabled', true)
+                $.post("/suggest/", json, function (data, status) {
+                    $('#message-suggest').addClass('text-success');
+                    $('#message-suggest').html("Your suggestion is saved. Thanks!");
+                    $('#frm-suggestion')[0].reset();
+                })
+                    .fail(function () {
+                        $('#message-suggest').addClass('text-danger');
+                        $('#message-suggest').html("We have failed to save your suggestion 😥");
+                    })
+                    .always(function () {
+                        $('#frm-suggestion > button[type=submit]').attr('disabled', false);
+                    });
+
+
+            })
+        });
+    </script>
 {% endblock %}

@@ -19,19 +19,12 @@ from django.urls import path
 from app import views
 
 
+# from Processor.Converter import Converter
 urlpatterns = [
 	url(r'^$', views.Index, name = 'index'),
+	path('tweets/<str:q>/', views.GetTweets, name = 'tweets'),
+	path('emojis/', views.GetEmojis, name = 'emojis'),
+	path('emojis/<str:q>/', views.GetEmojis, name = 'emojis'),
+	path('suggest/', views.Suggest, name = 'suggest'),
 	path('admin/', admin.site.urls),
 ]
-#
-
-from Processor.Converter import Converter
-from TwitterService.Client import TwitterClient
-
-client = TwitterClient()
-# content = client.Get('search/tweets.json', lang = 'en', q='nasa', result_type = 'popular')
-content = client.GetFromHistory("04-11-2018 17.06.12.391")
-url = content.get('url')
-tweets = content.get('statuses')
-emojiList = Converter(tweets[0]).Result
-print("ok")

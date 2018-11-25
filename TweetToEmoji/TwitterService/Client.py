@@ -36,6 +36,6 @@ class TwitterClient(object):
 	def __saveToFile(self, content):
 		if self.SaveToFile:
 			with open(
-					'TwitterService/Requests/{0}.json'.format(datetime.utcnow().strftime('%d-%m-%Y %H.%M.%S.%f')[:-3]),
+					'C:\\Users\\leven\\Documents\\GitHub\\BOUN-SWE-573\\TweetToEmoji\\TwitterService\\Requests\\{0}.json'.format(datetime.utcnow().strftime('%d-%m-%Y %H.%M.%S.%f')[:-3]),
 					'w+') as outfile:
 				json.dump(content, outfile)

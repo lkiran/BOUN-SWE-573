@@ -4,3 +4,6 @@ TweetToEmoji/config.json
 TweetToEmoji/config.json
 *.pyc
 *.pyc
+*.ipynb
+app/migrations
+*.ipynb
