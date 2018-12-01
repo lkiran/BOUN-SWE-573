@@ -34,19 +34,21 @@
 {% block scripts %}
     <script type="text/template" id="template-tweet">
         << _.each(content, function(item, index) { >>
-        <div class="media text-muted pt-3">
+        <div class="media text-muted pt-3 tweet" tweetId="<<= item.id_str >>">
             <img src="<<= item.user.profile_image_url_https >>" class="mr-2 rounded" style="width: 48px; height: 48px;"
                  data-holder-rendered="true">
-            <p class="media-body pr-2 pb-3 mb-0 lh-125 border-bottom border-gray">
-                <span class="d-block small text-gray-dark"><strong
-                        class="text-gray-dark"><<= item.user.screen_name >></strong> @<<= item.user.name >></span>
+            <p class="media-body pr-2 pb-3 mb-0 lh-125">
+                <span class="d-block small text-gray-dark">
+                    <strong class="text-gray-dark"><<= item.user.screen_name >></strong> @<<= item.user.name >>
+                </span>
                 <<= item.full_text >>
+                <a href="#convert-tweet" class="btn-convert" tweetid="<<= item.id_str >>">Try converting to emoji</a>
             </p>
-            <div class="vote my-auto" style="float: right">
-                <a href="" title="Like"><i class="fas fa-chevron-up"></i></a>
+            <span class="vote my-auto" style="float: right">
+                <a href="" title="Like"><i class="fas fa-check"></i></a>
                 <br><br>
-                <a href="" title="Wrong"><i class="fas fa-chevron-down"></i></a>
-            </div>
+                <a href="" title="Wrong"><i class="fas fa-times"></i></a>
+            </span>
         </div>
         << }); >>
     </script>
@@ -58,6 +60,15 @@
         << }); >>
     </script>
 
+    <script type="text/template" id="template-converted">
+        <hr>
+        <ul>
+            <li>ok</li>
+            <li>ok</li>
+        </ul>
+
+    </script>
+
     <script>
         var emojilist = [];
 
@@ -65,6 +76,17 @@
             $.getJSON("/tweets/" + q, function (data) {
                 var template = _.template($("#template-tweet").html());
                 $("#tweet-container").html(template({content: data.statuses}));
+
+                $('.btn-convert').click(function () {
+                    var id = $(this).attr("tweetId");
+                    $.getJSON("/convert/" + id, function (data) {
+                        var template = _.template($("#template-converted").html());
+                        $(".tweet[tweetId=" + id + "]").find('.media-body').append(template({content: data}));
+                        console.log(data);
+                    });
+                    $(this).hide();
+                });
+
                 console.log(data);
             });
         }
@@ -102,7 +124,7 @@
             $('#frm-suggestion').submit(function (e) {
                 e.preventDefault();
                 json = $(this).serialize();
-                $('#frm-suggestion > button[type=submit]').attr('disabled', true)
+                $('#frm-suggestion > button[type=submit]').attr('disabled', true);
                 $.post("/suggest/", json, function (data, status) {
                     $('#message-suggest').addClass('text-success');
                     $('#message-suggest').html("Your suggestion is saved. Thanks!");
@@ -115,8 +137,6 @@
                     .always(function () {
                         $('#frm-suggestion > button[type=submit]').attr('disabled', false);
                     });
-
-
             })
         });
     </script>

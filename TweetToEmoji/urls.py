@@ -26,5 +26,6 @@ urlpatterns = [
 	path('emojis/', views.GetEmojis, name = 'emojis'),
 	path('emojis/<str:q>/', views.GetEmojis, name = 'emojis'),
 	path('suggest/', views.Suggest, name = 'suggest'),
+	path('convert/<int:tweetId>/', views.ConvertTweet, name = 'convert'),
 	path('admin/', admin.site.urls),
 ]

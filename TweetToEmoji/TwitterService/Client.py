@@ -1,7 +1,7 @@
 import json
 from datetime import datetime
 
-from TwitterService.Authentication import Authentication
+from TweetToEmoji.TwitterService.Authentication import Authentication
 
 class TwitterClient(object):
 	__authService = Authentication.getInstance()
