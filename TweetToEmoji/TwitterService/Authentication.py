@@ -1,6 +1,6 @@
 import json
 
-import oauth2
+import oauth2 as oauth
 
 class Authentication(object):
 	__instance = None
@@ -21,7 +21,7 @@ class Authentication(object):
 			Authentication.__instance = self
 
 	def __load(self):
-		json_data = open('C:\\Users\\leven\\Documents\\GitHub\\BOUN-SWE-573\\TweetToEmoji\\config.json').read()
+		json_data = open('/home/ubuntu/TweetToEmoji/TweetToEmoji/config.json').read()
 		data = json.loads(json_data)
 		self.API_SECRET_KEY = data.get('API_SECRET_KEY', "")
 		if not self.API_SECRET_KEY:
@@ -37,7 +37,7 @@ class Authentication(object):
 			raise Exception("'ACCESS_TOKEN_SECRET' key is not found in 'config.json' or empty!")
 
 	def GetClient(self):
-		consumer = oauth2.Consumer(key = self.API_KEY, secret = self.API_SECRET_KEY)
-		token = oauth2.Token(key = self.ACCESS_TOKEN, secret = self.ACCESS_TOKEN_SECRET)
-		client = oauth2.Client(consumer, token)
+		consumer = oauth.Consumer(key = self.API_KEY, secret = self.API_SECRET_KEY)
+		token = oauth.Token(key = self.ACCESS_TOKEN, secret = self.ACCESS_TOKEN_SECRET)
+		client = oauth.Client(consumer, token)
 		return client
