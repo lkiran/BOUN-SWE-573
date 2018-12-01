@@ -1,1 +1,1 @@
-import TweetToEmoji.TwitterService
+from TweetToEmoji import TwitterService
