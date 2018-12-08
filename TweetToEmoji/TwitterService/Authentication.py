@@ -21,7 +21,9 @@ class Authentication(object):
 			Authentication.__instance = self
 
 	def __load(self):
-		json_data = open('C:\\Users\\leven\\Documents\\GitHub\\BOUN-SWE-573\\TweetToEmoji\\config.json').read()
+		self.ConfigFile = 'C:\\Users\\leven\\Documents\\GitHub\\BOUN-SWE-573\\TweetToEmoji\\config.json'
+		with  open(self.ConfigFile, 'r') as f:
+			json_data = f.read()
 		data = json.loads(json_data)
 		self.API_SECRET_KEY = data.get('API_SECRET_KEY', "")
 		if not self.API_SECRET_KEY:
