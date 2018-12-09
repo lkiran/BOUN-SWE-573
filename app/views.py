@@ -5,6 +5,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
+from Processor.Converter import Converter
 from TweetToEmoji.TwitterService import Client
 from app.models import Emoji, EmojiKeyword
 
@@ -20,7 +21,9 @@ def ConvertTweet(request, tweetId):
 	client = Client.TwitterClient()
 	tweet = client.Get('statuses/show.json', id = tweetId, tweet_mode = 'extended')
 	text = tweet.get('full_text')
-	return HttpResponse(json.dumps(tweet), content_type = "application/json")
+	converter = Converter(text)
+	result = converter.Result
+	return HttpResponse(json.dumps(result), content_type = "application/json")
 
 def GetEmojis(request, q = None):
 	if q is not None:

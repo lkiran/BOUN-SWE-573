@@ -1,45 +1,49 @@
+from django.forms import model_to_dict
 from nltk.tokenize import sent_tokenize
 from difflib import SequenceMatcher
 
-from app.models import Emoji, IgnoredPhrases
+from app.models import Emoji, IgnoredPhrases, EmojiKeyword
 
 class Converter(object):
 	def __init__(self, tweet):
-		self.Text = tweet.get('text', '')
-		self.Sentences = sent_tokenize(self.Text)
-
-		print(self.Text)
-		print(self.Sentences)
+		self.Sentences = sent_tokenize(tweet)
 
 	@property
 	def Result(self):
+		result = []
 		for sent in self.Sentences:
-			self.__subsets(sent)
-		return ""
+			sentence_result = {
+				"sentence": sent,
+				"phrases": self.__subsets(sent),
+				"result": self.__replace(sent)
+			}
+			result.append(sentence_result)
+		return result
 
 	def __subsets(self, sent):
 		words = sent.split(" ")
+		phrases = { }
 		for slen in range(1, len(words)):
 			for sshift in range(0, len(words) - slen):
 				phrase = ' '.join(words[sshift:slen + sshift])
-				emojiList = self.__getEmojiListOfPhrase(phrase)
-				if emojiList:
-					print(phrase, emojiList)
+				if phrase in phrases:
+					continue
+				pair = self.__getEmojiRepresentation(phrase)
+				phrases[phrase] = pair
+		return phrases
 
-	def __getEmojiListOfPhrase(self, phrase):
-		ignoredPhrase = IgnoredPhrases.objects.filter(Phrase = phrase)
-		if len(ignoredPhrase):
+	def __getEmojiRepresentation(self, phrase):
+		pair = EmojiKeyword.objects.all().filter(Keyword = phrase).first()
+		if pair is None:
 			return None
-		emojiList = Emoji.objects.filter(Description__contains = phrase)
-		if len(emojiList) == 0:
-			return None
-		if len(emojiList) > 20:
-			ignore = IgnoredPhrases()
-			ignore.Phrase = phrase
-			ignore.save()
-			return None
-		return set(emojiList)
+		return model_to_dict(pair, fields = ("Id", "Keyword", "Emoji"))
 
+	def __replace(self, sent):
+		for phrase, emoji in self.__subsets(sent).items():
+			if emoji is None:
+				continue
+			sent = sent.replace(phrase, emoji["Emoji"])
+		return sent
 
 def __similarityOfTwoWords(a, b):
 	return SequenceMatcher(None, a, b).ratio()
