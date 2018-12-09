@@ -5,7 +5,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
-from Processor.Converter import Converter
+from TweetToEmoji.Processor.Converter import Converter
 from TweetToEmoji.TwitterService import Client
 from app.models import Emoji, EmojiKeyword
 
