@@ -12,7 +12,7 @@ class TwitterClient(object):
 		self.SaveToFile = True
 
 	def GetFromHistory(self, filename):
-		filename = 'TwitterService/Requests/{0}.json'.format(filename)
+		filename = '/home/ubuntu/TweetToEmoji/TweetToEmoji/Requests/{0}.json'.format(filename)
 		json_data = open(filename).read()
 		return json.loads(json_data)
 
@@ -35,7 +35,6 @@ class TwitterClient(object):
 
 	def __saveToFile(self, content):
 		if self.SaveToFile:
-			with open(
-					'C:\\Users\\leven\\Documents\\GitHub\\BOUN-SWE-573\\TweetToEmoji\\TwitterService\\Requests\\{0}.json'.format(datetime.utcnow().strftime('%d-%m-%Y %H.%M.%S.%f')[:-3]),
+			with open('/home/ubuntu/TweetToEmoji/TweetToEmoji/Requests/{0}.json'.format(datetime.utcnow().strftime('%d-%m-%Y %H.%M.%S.%f')[:-3]),
 					'w+') as outfile:
 				json.dump(content, outfile)
