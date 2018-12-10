@@ -37,12 +37,14 @@
         <div class="media text-muted pt-3 tweet" tweetId="<<= item.id_str >>">
             <img src="<<= item.user.profile_image_url_https >>" class="mr-2 rounded" style="width: 48px; height: 48px;"
                  data-holder-rendered="true">
-            <p class="media-body pr-2 pb-3 mb-0 lh-125">
+            <p class="media-body pr-2 pb-3 mb-0 lh-125 content-container">
                 <span class="d-block small text-gray-dark">
                     <strong class="text-gray-dark"><<= item.user.screen_name >></strong> @<<= item.user.name >>
                 </span>
-                <<= item.full_text >>
-                <a href="#convert-tweet" class="btn-convert" tweetid="<<= item.id_str >>">Try converting to emoji</a>
+                <span class="original-content">
+                    <<= item.full_text >>
+                    <a href="#convert-tweet" class="btn-convert" tweetid="<<= item.id_str >>">Try converting to emoji</a>
+                </span>
             </p>
             <span class="vote my-auto" style="float: right">
                 <a href="" title="Like"><i class="fas fa-check"></i></a>
@@ -61,12 +63,22 @@
     </script>
 
     <script type="text/template" id="template-converted">
-        <hr>
-        <ul>
-            <li>ok</li>
-            <li>ok</li>
-        </ul>
-
+        <span class="converted-content">
+            << _.each(content, function(sentence, index) { >>
+            <p><<= sentence.result >></p>
+            << $.each(sentence.phrases, function(phrase, index) { >>
+            <ul>
+                << if(sentence.phrases[phrase] != null) { >>
+                <li>
+                    <<= phrase >>
+                    <<= sentence.phrases[phrase].Emoji >>
+                </li>
+                << } >>
+            </ul>
+            << }); >>
+            << }); >>
+            <a href="#original-tweet" class="btn-original">Show the original tweet</a>
+        </span>
     </script>
 
     <script>
@@ -82,11 +94,15 @@
                     $.getJSON("/convert/" + id, function (data) {
                         var template = _.template($("#template-converted").html());
                         $(".tweet[tweetId=" + id + "]").find('.media-body').append(template({content: data}));
+
+                         $('.btn-original').click(function () {
+                            $(this).closest('.converted-content').hide();
+                            $(this).parent().parent().find('.original-content').show();
+                        });
                         console.log(data);
                     });
-                    $(this).hide();
+                    $(this).closest('.original-content').hide();
                 });
-
                 console.log(data);
             });
         }
