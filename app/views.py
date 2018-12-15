@@ -14,7 +14,13 @@ def Index(request):
 
 def GetTweets(request, q):
 	client = Client.TwitterClient()
-	content = client.Get('search/tweets.json', lang = 'en', q = q, result_type = 'popular', tweet_mode = 'extended')
+	content = { }
+	if q.startswith('tweetid='):
+		tweetId = q.replace('tweetid=', '')
+		tweet = client.Get('statuses/show.json', id = tweetId, tweet_mode = 'extended')
+		content['statuses'] = [tweet]
+	else:
+		content = client.Get('search/tweets.json', lang = 'en', q = q, result_type = 'popular', tweet_mode = 'extended')
 	return HttpResponse(json.dumps(content), content_type = "application/json")
 
 def ConvertTweet(request, tweetId):
@@ -37,10 +43,11 @@ def GetEmojis(request, q = None):
 def Suggest(request):
 	data = request.POST
 	model = EmojiKeyword()
-	model.Keyword= data['txt-phrase']
+	keywordInput = data['txt-phrase'].strip().lower()
+	model.Keyword = keywordInput
 	model.Emoji = data['txt-emojis']
 	model.SuggestedByUser = True
 	model.save()
 	if model.Id is None:
 		return JsonResponse({ 'Id': None }, status = 500)
-	return JsonResponse({ 'Id': model.Id}, status = 200)
+	return JsonResponse({ 'Id': model.Id }, status = 200)
