@@ -70,4 +70,7 @@ def DictToPair(d):
 	return sorted(l, key = lambda x: x.WordCount, reverse = True)
 
 def TagOf(word):
+	word = word.strip()
+	if len(word) == 0:
+		return ""
 	return pos_tag([word])[0][1]
