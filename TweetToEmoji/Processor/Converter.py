@@ -25,7 +25,7 @@ class Converter(object):
 
 	def __subsets(self, sent):
 		sent = self.__removeEmojis(sent)
-		words = sent.split(" ")
+		words = Split(sent)
 		phrases = { }
 		for slen in range(1, len(words)):
 			for sshift in range(0, len(words) - slen):
@@ -69,11 +69,14 @@ class Pair(object):
 
 	@property
 	def WordCount(self):
-		return len(self.Key.split(" "))
+		return len(Split(self.Key))
 
 def DictToPair(d):
 	l = [Pair(key, value) for key, value in d.items()]
 	return sorted(l, key = lambda x: x.WordCount, reverse = True)
+
+def Split(text):
+	return re.split('[ \n]', text)
 
 def TagOf(word):
 	word = word.strip()
