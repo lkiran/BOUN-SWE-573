@@ -2,6 +2,7 @@ from django.forms import model_to_dict
 from nltk.tokenize import sent_tokenize
 from nltk.stem.porter import *
 from nltk import pos_tag
+import re
 
 from app.models import Emoji, EmojiKeyword
 
@@ -23,6 +24,7 @@ class Converter(object):
 		return result
 
 	def __subsets(self, sent):
+		sent = self.__removeEmojis(sent)
 		words = sent.split(" ")
 		phrases = { }
 		for slen in range(1, len(words)):
@@ -55,6 +57,10 @@ class Converter(object):
 				continue
 			sent = sent.replace(pair[1].Key, pair[1].Value["Emoji"])
 		return sent
+
+	def __removeEmojis(self, text):
+		RE_EMOJI = re.compile('[\U00010000-\U0010ffff]', flags = re.UNICODE)
+		return RE_EMOJI.sub(r'', text)
 
 class Pair(object):
 	def __init__(self, key = "", value = ""):
