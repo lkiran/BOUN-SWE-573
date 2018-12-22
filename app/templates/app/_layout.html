@@ -23,8 +23,20 @@
             background-color: lightgray;
             border-radius: 3px;
         }
-    </style>
 
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
     <title>Tweet To Emoji</title>
 </head>
 <body class="bg-light">
@@ -40,7 +52,8 @@
 
         <div class="input-group mt-2" style="max-width: 800px; margin: 0 auto;">
             <div class="input-group-prepend">
-                <a class="input-group-text" id="btn-search-id" href="#">by Tweet id<span class="sr-only">by Tweet id</span></a>
+                <a class="input-group-text" id="btn-search-id" href="#">by Tweet id<span
+                        class="sr-only">by Tweet id</span></a>
             </div>
             <input id="txt-query" class="form-control" type="search" placeholder="Query" aria-label="Search">
             <div class="input-group-append">
@@ -78,9 +91,9 @@
 <script>
     $(document).ready(function () {
         $('#btn-search-id').click(function () {
-            var keywordIdSearch="tweetid=";
-            var query=$('#txt-query').val();
-            if(!query.startsWith(keywordIdSearch))
+            var keywordIdSearch = "tweetid=";
+            var query = $('#txt-query').val();
+            if (!query.startsWith(keywordIdSearch))
                 $('#txt-query').val(keywordIdSearch + query)
         });
     });

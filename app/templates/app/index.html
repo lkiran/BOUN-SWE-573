@@ -25,7 +25,12 @@
                 <button class="btn btn-block btn-default" type="submit">SUGGEST</button>
                 <small id="message-suggest"></small>
             </form>
-            <div id="emoji-container" class="text-justify mt-3" style="overflow-y: scroll; height: 56vh;"></div>
+
+            <div class="form-group input-group-sm mb-0 mt-3">
+                <input type="text" class="form-control" name="txt-emojisearch" id="txt-emojisearch"
+                       placeholder="SEARCH EMOJI">
+            </div>
+            <div id="emoji-container" class="text-justify" style="overflow-y: scroll; height: 56vh;"></div>
         </div>
     </div>
 
@@ -43,14 +48,10 @@
                 </span>
                 <span class="original-content">
                     <<= item.full_text >>
-                    <a href="#convert-tweet" class="btn-convert" tweetid="<<= item.id_str >>">Try converting to emoji</a>
+                    <a href="#convert-tweet" class="btn-convert"
+                       tweetid="<<= item.id_str >>">Try converting to emoji</a>
                 </span>
             </p>
-            <span class="vote my-auto" style="float: right">
-                <a href="" title="Like"><i class="fas fa-check"></i></a>
-                <br><br>
-                <a href="" title="Wrong"><i class="fas fa-times"></i></a>
-            </span>
         </div>
         << }); >>
     </script>
@@ -58,8 +59,22 @@
     <script type="text/template" id="template-emoji">
         << _.each(content, function(item, index) { >>
         <a href="#<<= item.fields.Icon >>" data-emojiId="<<=item.pk >>" title="<<= item.fields.Name >>"
-           class="emoji-key zoom"><<=item.fields.Icon >></a>
+           class="emoji-key" name="<<= item.fields.Name.toLowerCase() >>"><<= item.fields.Icon >></a>
         << }); >>
+    </script>
+
+    <script type="text/template" id="template-alternatives">
+        <ul>
+            << _.each(content, function(item, index) { >>
+            <li>
+                <<= item.fields.Emoji >>
+                <a href="#like" class="btn-like ml-2" data-id="<<= item.pk >>" title="Like">
+                    <i class="fas fa-check"></i></a>
+                <a href="#wrong" class="btn-wrong ml-2" data-id="<<= item.pk >>" title="Wrong">
+                    <i class="fas fa-times"></i></a>
+            </li>
+            << }); >>
+        </ul>
     </script>
 
     <script type="text/template" id="template-converted">
@@ -72,6 +87,14 @@
                 <li>
                     <<= phrase >>
                     <<= sentence.phrases[phrase].Emoji >>
+
+                    <a href="#like" class="btn-like ml-2" data-id="<<= sentence.phrases[phrase].Id >>" title="Like">
+                        <i class="fas fa-check"></i></a>
+                    <a href="#wrong" class="btn-wrong ml-2" data-id="<<= sentence.phrases[phrase].Id >>" title="Wrong">
+                        <i class="fas fa-times"></i></a>
+                    << if(sentence.phrases[phrase].HasAlternatives) { >>
+                    <a href="#" class="btn-alternatives ml-3" data-id="<<= sentence.phrases[phrase].Id >>">Show alternatives</a>
+                    << } >>
                 </li>
                 << } >>
             </ul>
@@ -84,6 +107,25 @@
     <script>
         var emojilist = [];
 
+        function Vote(id, up) {
+            $.post("/vote/", {id: id, up: up}, function (data, status) {
+                $('.btn-like[data-id=' + id + ']').hide();
+                $('.btn-wrong[data-id=' + id + ']').hide();
+            });
+        }
+
+        function LoadVoteEvents() {
+            $('.btn-like').click(function () {
+                var id = $(this).data("id");
+                Vote(id, true);
+            });
+
+            $('.btn-wrong').click(function () {
+                var id = $(this).data("id");
+                Vote(id, false);
+            });
+        }
+
         function LoadTweets(q) {
             $.getJSON("/tweets/" + q, function (data) {
                 var template = _.template($("#template-tweet").html());
@@ -94,8 +136,18 @@
                     $.getJSON("/convert/" + id, function (data) {
                         var template = _.template($("#template-converted").html());
                         $(".tweet[tweetId=" + id + "]").find('.media-body').append(template({content: data}));
+                        LoadVoteEvents();
 
-                         $('.btn-original').click(function () {
+                        $('.btn-alternatives').click(function () {
+                            var id = $(this).data("id");
+                            $.getJSON("/alternatives/" + id, function (data) {
+                                var template = _.template($("#template-alternatives").html());
+                                $(".btn-alternatives[data-id=" + id + "]").replaceWith(template({content: data}));
+                                LoadVoteEvents();
+                            });
+                        });
+
+                        $('.btn-original').click(function () {
                             $(this).closest('.converted-content').hide();
                             $(this).parent().parent().find('.original-content').show();
                         });
@@ -118,12 +170,21 @@
                 LoadTweets(q);
             });
 
-
             $('#txt-query').on("keypress", function (e) {
                 if (e.keyCode !== 13) return true;
                 var q = $('#txt-query').val();
                 LoadTweets(q);
                 return false;
+            });
+
+            $('#txt-emojisearch').on('input propertychange paste', function (e) {
+                var text = $(this).val();
+                if (text.length < 2) {
+                    $('.emoji-key').show();
+                    return true;
+                }
+                $('.emoji-key').hide();
+                $('.emoji-key[name*=' + text.toLowerCase() + ']').show();
             });
 
             $.getJSON("/emojis/", function (data) {
