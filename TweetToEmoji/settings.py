@@ -25,7 +25,7 @@ SECRET_KEY = 'qg_e&b61zyuup)%#z=qap8hm81+xr#jlw-iaemd&fx@zim&c%6'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['18.184.124.29']
+ALLOWED_HOSTS = ['18.184.124.29', 'www.tweettoemoji.net', 'tweettoemoji.net' ]
 
 
 # Application definition
