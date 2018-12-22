@@ -13,22 +13,10 @@ class Emoji(models.Model):
 	def __unicode__(self):
 		return u'{0} {1}'.format(self.Icon, self.Name)
 
-class IgnoredPhrases(models.Model):
-	Id = models.AutoField(primary_key = True)
-	Phrase = models.CharField(max_length = 250)
 
 class EmojiKeyword(models.Model):
 	Id = models.AutoField(primary_key = True)
 	Emoji =  models.CharField(max_length = 250)
 	Keyword = models.CharField(max_length = 250)
+	Vote = models.IntegerField(default = 0)
 	SuggestedByUser = models.BooleanField(default = False)
-
-class Conversion(models.Model):
-	Id = models.AutoField(primary_key = True)
-	Raw = models.CharField(max_length = 500)
-	# EmojiList = models.ManyToManyField(EmojiKeyword, verbose_name = "Emoji List")
-
-class Vote(models.Model):
-	Id = models.AutoField(primary_key = True)
-	Value = models.BooleanField(default = True)  # True=Like, False=Hate
-	Conversion = models.ForeignKey(Conversion, on_delete = models.CASCADE, verbose_name = "Processed Tweet")

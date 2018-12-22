@@ -45,10 +45,13 @@ class Converter(object):
 
 	def __getEmojiRepresentation(self, phrase):
 		phrase = phrase.lower()
-		pair = EmojiKeyword.objects.all().filter(Keyword = phrase).first()
+		pairs = EmojiKeyword.objects.filter(Keyword = phrase).order_by('-Vote')
+		pair = pairs.first()
 		if pair is None:
 			return None
-		return model_to_dict(pair, fields = ("Id", "Keyword", "Emoji"))
+		modeldict = model_to_dict(pair, fields = ("Id", "Keyword", "Emoji"))
+		modeldict['HasAlternatives'] = len(pairs) > 1
+		return modeldict
 
 	def __replace(self, sent):
 		sortedDict = DictToPair(self.__subsets(sent))

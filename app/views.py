@@ -39,6 +39,33 @@ def GetEmojis(request, q = None):
 	ej = serializers.serialize("json", emojis)
 	return HttpResponse(ej, content_type = "application/json")
 
+def GetOtherEmojiKeywords(request, id):
+	pair = EmojiKeyword.objects.filter(Id = id).first()
+	others =EmojiKeyword.objects\
+		.filter(Keyword = pair.Keyword)\
+		.exclude(Id = id)
+	json = serializers.serialize("json", others)
+	return HttpResponse(json, content_type = "application/json")
+
+@csrf_exempt
+def Vote(request):
+	data = request.POST
+	id = data['id']
+	model = EmojiKeyword.objects.filter(Id = id).first()
+	if model is None:
+		raise Exception("EmojiKeyword with id={0} could not be found".format(id))
+	up = bool(data['up'])
+	newVote = model.Vote
+	if up:
+		newVote += 1
+	else:
+		newVote -= 1
+	model.Vote = newVote
+	model.save()
+	if model.Vote is newVote:
+		return JsonResponse({ 'Id': model.Id }, status = 200)
+	return JsonResponse({ 'Id': None }, status = 500)
+
 @csrf_exempt
 def Suggest(request):
 	data = request.POST
