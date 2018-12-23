@@ -1,5 +1,7 @@
-from django.test import TestCase
+import unittest
+from unittest import TestCase
 
+#python -m unittest Tests/test_authentication.py
 class TestAuthentication(TestCase):
 	def test_getInstance(self):
 		from TweetToEmoji.TwitterService.Authentication import Authentication
@@ -18,3 +20,7 @@ class TestAuthentication(TestCase):
 		auth = Authentication.getInstance()
 		client = auth.GetClient()
 		self.assertEqual(type(client), Client, "Authentication client is not valid")
+
+
+if __name__ == '__main__':
+	unittest.main()
