@@ -1,4 +1,4 @@
-# BOUN-SWE-573
+# tweettoemoji.net 
 SWE 573: Software Development Practice Course Repository
 
 This repository is created for SWE573 Fall-2018 course. 
