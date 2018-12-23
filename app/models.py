@@ -20,3 +20,9 @@ class EmojiKeyword(models.Model):
 	Keyword = models.CharField(max_length = 250)
 	Vote = models.IntegerField(default = 0)
 	SuggestedByUser = models.BooleanField(default = False)
+
+	def __str__(self):
+		return u'{0} {1}'.format(self.Emoji, self.Keyword)
+
+	def __unicode__(self):
+		return u'{0} {1}'.format(self.Emoji, self.Keyword)
