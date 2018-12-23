@@ -27,8 +27,8 @@ class Converter(object):
 		sent = self.__removeEmojis(sent)
 		words = Split(sent)
 		phrases = { }
-		for slen in range(1, len(words)):
-			for sshift in range(0, len(words) - slen):
+		for slen in range(1, len(words) + 1):
+			for sshift in range(0, len(words) - slen + 1):
 				phrase = ' '.join(words[sshift:slen + sshift])
 				if phrase in phrases:
 					continue
@@ -45,6 +45,9 @@ class Converter(object):
 
 	def __getEmojiRepresentation(self, phrase):
 		phrase = phrase.lower()
+		charToRemove = ". , ; ! ? ( ) [ ]".split(" ")
+		for c in charToRemove:
+			phrase = phrase.replace(c, "")
 		pairs = EmojiKeyword.objects.filter(Keyword = phrase).order_by('-Vote')
 		pair = pairs.first()
 		if pair is None:
