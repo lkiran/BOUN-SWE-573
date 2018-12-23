@@ -1,10 +1,7 @@
+*.pyc
+*.ipynb
+
 .idea
-TweetToEmoji/config.json
-TweetToEmoji/config.json
-TweetToEmoji/config.json
-*.pyc
-*.pyc
-*.ipynb
 app/migrations
-*.ipynb
+TweetToEmoji/config.json
 TweetToEmoji/TwitterService/config.json
